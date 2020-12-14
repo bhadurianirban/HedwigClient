@@ -15,6 +15,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
+import org.hedwig.cloud.dto.HedwigConstants;
 import org.hedwig.cloud.dto.UserAuthDTO;
 import org.hedwig.cloud.response.HedwigResponseCode;
 
@@ -26,15 +27,18 @@ public class UserAuthClient {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = HedwigConstants.BASE_URL;
-
-    public UserAuthClient() {
-        client = javax.ws.rs.client.ClientBuilder.newClient();
-        webTarget = client.target(BASE_URI).path("userauth");
-
+    private static String CONNECTION_URL;
+//    public UserAuthClient() {
+//        CONNECTION_URL = HedwigConstants.createConnectionUrl();
+//    }
+    public UserAuthClient(String server,String serverPort) {
+        CONNECTION_URL = HedwigConstants.createConnectionUrl(server,serverPort);
     }
 
+
     public UserAuthDTO authenticateUser(UserAuthDTO userAuthDTO) {
+        client = javax.ws.rs.client.ClientBuilder.newClient();
+        webTarget = client.target(CONNECTION_URL).path("userauth");
         WebTarget resource = webTarget;
         ObjectMapper objectMapper = new ObjectMapper();
         String userAuthDTOJSON;

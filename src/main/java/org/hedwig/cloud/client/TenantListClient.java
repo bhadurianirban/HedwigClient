@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.hedwig.cloud.dto.HedwigConstants;
 import org.hedwig.cloud.dto.TenantDTO;
 /**
  *
@@ -25,12 +26,14 @@ public class TenantListClient {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = HedwigConstants.BASE_URL;
-
-    public TenantListClient() {
-//        client = javax.ws.rs.client.ClientBuilder.newClient();
-//        webTarget = client.target(BASE_URI).path("tenantlist");
+    private static String CONNECTION_URL;
+//    public TenantListClient() {
+//        CONNECTION_URL = HedwigConstants.createConnectionUrl();
+//    }
+    public TenantListClient(String server,String serverPort) {
+        CONNECTION_URL = HedwigConstants.createConnectionUrl(server,serverPort);
     }
+
 
     public List<TenantDTO> getTenantList(int productId) {
         TenantDTO tenantDTO = new TenantDTO();
@@ -39,7 +42,7 @@ public class TenantListClient {
         
         client = javax.ws.rs.client.ClientBuilder.newClient();
         
-        webTarget = client.target(BASE_URI).path("tenantlist").queryParam("productID",Integer.toString(productId));
+        webTarget = client.target(CONNECTION_URL).path("tenantlist").queryParam("productID",Integer.toString(productId));
          WebTarget resource = webTarget;
         Invocation.Builder ib = resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON);
         //List<TenantDTO> tenantDTOs = null;

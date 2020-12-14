@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.hedwig.cloud.dto.DataConnDTO;
+import org.hedwig.cloud.dto.HedwigConstants;
 import org.hedwig.cloud.response.HedwigResponseCode;
 
 /**
@@ -25,14 +26,20 @@ public class DataConnClient {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = HedwigConstants.BASE_URL;
+    private static  String CONNECTION_URL;
+//    public DataConnClient() {
+//        CONNECTION_URL = HedwigConstants.createConnectionUrl();
+//    }
+    public DataConnClient(String server,String serverPort) {
+        CONNECTION_URL = HedwigConstants.createConnectionUrl(server,serverPort);
+    }
 
     public DataConnDTO getDataConnParams(DataConnDTO dataConnDTO) {
         client = javax.ws.rs.client.ClientBuilder.newClient();
         ObjectMapper objectMapper = new ObjectMapper();
         String dataConnDTOJSON = null;
         String respDataConnDTOJSON;
-        webTarget = client.target(BASE_URI).path("dataconn");
+        webTarget = client.target(CONNECTION_URL).path("dataconn");
         WebTarget resource = webTarget;
         try {
             dataConnDTOJSON = objectMapper.writeValueAsString(dataConnDTO);

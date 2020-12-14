@@ -14,6 +14,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
+import org.hedwig.cloud.dto.HedwigConstants;
 import org.hedwig.cloud.dto.RoleDTO;
 import org.hedwig.cloud.response.HedwigResponseCode;
 
@@ -25,14 +26,19 @@ public class RoleListClient {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = HedwigConstants.BASE_URL;
-
+    private static  String CONNECTION_URL;
+//    public RoleListClient() {
+//        CONNECTION_URL = HedwigConstants.createConnectionUrl();
+//    }
+    public RoleListClient(String server,String serverPort) {
+        CONNECTION_URL = HedwigConstants.createConnectionUrl(server,serverPort);
+    }
     public RoleDTO getRoleList(RoleDTO roleDTO) {
         client = javax.ws.rs.client.ClientBuilder.newClient();
         ObjectMapper objectMapper = new ObjectMapper();
         String roleDTOJSON = null;
         String respRoleDTOJSON;
-        webTarget = client.target(BASE_URI).path("rolelist");
+        webTarget = client.target(CONNECTION_URL).path("rolelist");
         WebTarget resource = webTarget;
         try {
             roleDTOJSON = objectMapper.writeValueAsString(roleDTO);

@@ -16,16 +16,24 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
+import org.hedwig.cloud.dto.HedwigConstants;
 import org.hedwig.cloud.dto.ProductDTO;
 
 /**
  *
  * @author dgrfv
  */
-public class DGRFProductListClient {
+public class ProductListClient {
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = HedwigConstants.BASE_URL;
+    private static String CONNECTION_URL;
+
+//    public ProductListClient() {
+//        CONNECTION_URL = HedwigConstants.createConnectionUrl();
+//    }
+    public ProductListClient(String server,String serverPort) {
+        CONNECTION_URL = HedwigConstants.createConnectionUrl(server,serverPort);
+    }
     
     public List<ProductDTO> getProductList() {
        
@@ -33,7 +41,7 @@ public class DGRFProductListClient {
         
         client = javax.ws.rs.client.ClientBuilder.newClient();
         
-        webTarget = client.target(BASE_URI).path("productlist");
+        webTarget = client.target(CONNECTION_URL).path("productlist");
          WebTarget resource = webTarget;
         Invocation.Builder ib = resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON);
         
